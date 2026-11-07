@@ -9,7 +9,7 @@
 - The Svelte peer floor is `^5.29.0`, the first release with `{@attach}`, which `Stage` uses. Older 5.x consumers got a compile error.
 - `Window`'s title bar class is `mes-titlebar`, no longer the same name as `Bar`'s root class.
 - `scripts/film.ts` rejects a `--times` entry that is not a number instead of shooting at 0ms, and says that macOS and Windows need `MES_CHROME`.
-- The package no longer ships its `bun:test` file to consumers.
+- `files` excludes the `bun:test` file from a packed tarball. A `github:` install still fetches the whole repo, test included; nothing imports it.
 
 ### Changed
 
