@@ -12,6 +12,13 @@ interface Options {
 	out: string;
 }
 
+/** One `--times` entry as milliseconds; anything else is a usage error, not a silent 0. */
+function toMs(value: string): number {
+	const ms = Number(value);
+	if (!Number.isFinite(ms) || ms < 0) throw new Error(`--times: "${value}" is not a number of milliseconds`);
+	return ms;
+}
+
 /** Reads `<url> [--select css] [--times 1500,6000] [--width 1280] [--dark] [--out dir]`. */
 function parseArgs(argv: string[]): Options {
 	const flag = (name: string) => {
@@ -23,7 +30,7 @@ function parseArgs(argv: string[]): Options {
 	return {
 		url,
 		select: flag('select') ?? '.mes-host',
-		times: (flag('times') ?? '1500,4000,7000,10000,13000,16000').split(',').map(Number),
+		times: (flag('times') ?? '1500,4000,7000,10000,13000,16000').split(',').map(toMs),
 		width: Number(flag('width') ?? 1280),
 		dark: argv.includes('--dark'),
 		out: flag('out') ?? '.film'
@@ -36,7 +43,7 @@ function chromePath(): string {
 	const cache = join(homedir(), '.cache', 'ms-playwright');
 	const builds = existsSync(cache) ? readdirSync(cache).filter((d) => /^chromium-\d+$/.test(d)).sort() : [];
 	const newest = builds.at(-1);
-	if (!newest) throw new Error('no Chromium found: set MES_CHROME or run `bunx playwright-core install chromium`');
+	if (!newest) throw new Error('no Chromium found: set MES_CHROME or run `bunx playwright-core install chromium` (macOS and Windows always need MES_CHROME)');
 	return join(cache, newest, 'chrome-linux64', 'chrome');
 }
 

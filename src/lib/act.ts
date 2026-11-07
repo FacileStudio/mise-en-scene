@@ -37,14 +37,19 @@ export function sleep(ms: number, signal: AbortSignal): Promise<void> {
 	});
 }
 
-/** Runs `run` back to back until `signal` aborts; the abort itself is not an error. */
+/**
+ * Runs `run` back to back until `signal` aborts; the abort itself is not an error. A run that
+ * finishes within one frame never waited, so it plays once: looping it would spin the event loop.
+ */
 export async function loop(run: () => Promise<void>, signal: AbortSignal): Promise<void> {
 	while (!signal.aborted) {
+		const start = Date.now();
 		try {
 			await run();
 		} catch (error) {
 			if (!signal.aborted) throw error;
 		}
+		if (Date.now() - start < 16) return;
 	}
 }
 

@@ -12,9 +12,17 @@ describe('act', () => {
 		await loop(async () => {
 			runs++;
 			if (runs === 2) controller.abort();
-			await sleep(1, controller.signal);
+			await sleep(20, controller.signal);
 		}, controller.signal);
 		expect(runs).toBe(2);
+	});
+
+	it('plays a script that never waits once instead of spinning', async () => {
+		let runs = 0;
+		await loop(async () => {
+			runs++;
+		}, new AbortController().signal);
+		expect(runs).toBe(1);
 	});
 
 	it('types one character per step and counts up to the total', async () => {

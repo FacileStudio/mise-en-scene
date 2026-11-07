@@ -22,11 +22,11 @@
 @component
 A desktop app window: a 38px title bar, an optional full-height sidebar and the body. Its depth comes
 from shadow and surface steps, never a border. Position and size it from the scene with `class` or
-`style`; keep it whole or bleed it off one edge, never squash it.
+`style`; keep it whole inside the stage, four corners rounded and the shadow uncut, never squashed.
 -->
 
 <div class="mes-window {className}" {style}>
-	<div class="mes-bar mes-side">
+	<div class="mes-titlebar mes-side">
 		<span class="mes-dot"></span>
 		<span class="mes-dot"></span>
 		<span class="mes-dot"></span>
@@ -64,7 +64,7 @@ from shadow and surface steps, never a border. Position and size it from the sce
 	.mes-side {
 		background: var(--mes-w-side);
 	}
-	.mes-bar {
+	.mes-titlebar {
 		position: relative;
 		display: flex;
 		flex: none;

@@ -60,12 +60,9 @@ parse_args() {
   done
 }
 
-make_workdir() {
+fetch_skill() {
   WORK="$(mktemp -d)"
   trap 'rm -rf "$WORK"' EXIT
-}
-
-fetch_skill() {
   mkdir -p "$WORK/references"
   if [ "$LOCAL" -eq 1 ]; then
     local here
@@ -161,7 +158,6 @@ main() {
   setup_colors
   parse_args "$@"
   info "Installing $NAME"
-  make_workdir
   fetch_skill
   register_skill
   report

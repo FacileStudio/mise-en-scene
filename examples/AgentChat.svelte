@@ -2,6 +2,7 @@
 	import { tick } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { Bar, Cursor, Stage, Stream, Window, cursorAt, grow, type Act } from '../src/lib/index.js';
+	import ApprovalCard, { type ApprovalState } from './ApprovalCard.svelte';
 
 	type Step = 'hidden' | 'running' | 'ok' | 'failed';
 
@@ -17,7 +18,7 @@
 	let draft = $state('');
 	let sent = $state(false);
 	let steps = $state<Step[]>(['hidden', 'hidden', 'hidden']);
-	let approval = $state<'hidden' | 'pending' | 'pressed' | 'approved'>('hidden');
+	let approval = $state<ApprovalState>('hidden');
 	let words = $state(0);
 	let cursor = $state(cursorAt());
 	let approve = $state<HTMLElement>();
@@ -99,17 +100,7 @@
 						{/each}
 					</ul>
 				{/if}
-				{#if approval === 'pending' || approval === 'pressed'}
-					<div class="ac-approval" in:grow out:grow={{ duration: 350 }}>
-						<span class="ac-title">Open pull request</span>
-						<span class="ac-buttons">
-							<span bind:this={approve} class="ac-approve" class:ac-pressed={approval === 'pressed'}>Approve</span>
-							<span class="ac-deny">Deny</span>
-						</span>
-					</div>
-				{:else if approval === 'approved'}
-					<p class="ac-settled" in:grow out:fade={{ duration: 200, delay: 60 }}>Open pull request · <em>Approved</em></p>
-				{/if}
+				<ApprovalCard phase={approval} title="Open pull request" bind:approve />
 				{#if words > 0}
 					<div in:grow={{ duration: 300 }} out:fade={{ duration: 200 }}>
 						<Stream class="ac-answer" text={ANSWER} count={words} />
@@ -197,44 +188,6 @@
 	}
 	[data-state='failed'] .ac-mark {
 		background: var(--color-fc-danger, #c33);
-	}
-	.ac-approval {
-		display: grid;
-		gap: 12px;
-		padding-top: 16px;
-	}
-	.ac-title {
-		font-weight: 500;
-	}
-	.ac-buttons {
-		display: flex;
-		gap: 8px;
-	}
-	.ac-approve,
-	.ac-deny {
-		padding: 8px 16px;
-		border-radius: 999px;
-		transition: scale 0.1s ease;
-	}
-	.ac-approve {
-		background: var(--color-fc-accent, #111);
-		color: var(--color-fc-accent-fg, #fff);
-	}
-	.ac-pressed {
-		scale: 0.95;
-	}
-	.ac-deny,
-	.ac-settled {
-		color: var(--color-fc-fg-muted, #666);
-	}
-	.ac-settled {
-		margin: 0;
-		padding-top: 12px;
-		font-size: 13px;
-	}
-	.ac-settled em {
-		font-style: normal;
-		color: var(--color-fc-success, #2a8f4f);
 	}
 	:global(.ac-answer) {
 		margin: 0;

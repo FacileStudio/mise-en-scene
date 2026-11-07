@@ -18,7 +18,7 @@
 		height: number;
 		/** A second design for narrow hosts, used below `below` pixels of host width. */
 		compact?: StageSize & { below: number };
-		/** The scene's script; it loops while the stage is on screen. Omit it for a still. */
+		/** The scene's script; it loops while the stage is on screen. Omit it for a still, which shows `poster`. */
 		script?: Script;
 		/** Puts the scene back on its opening frame; called when the stage leaves the screen. */
 		reset?: () => void;
@@ -57,11 +57,10 @@
 	const scale = $derived(hostWidth ? Math.min(1, hostWidth / design.width) : 1);
 
 	function play(node: HTMLElement) {
-		if (prefersReducedMotion()) {
+		if (!script || prefersReducedMotion()) {
 			poster?.();
 			return;
 		}
-		if (!script) return;
 		const run = script;
 		let controller: AbortController | null = null;
 		const observer = new IntersectionObserver(
