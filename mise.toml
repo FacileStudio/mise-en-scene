@@ -1,0 +1,23 @@
+[tools]
+bun = "latest"
+
+[tasks.check]
+description = "Type-check the kit, the examples and the playground (svelte-check)"
+run = ["bun install", "bunx svelte-check --tsconfig ./tsconfig.json --fail-on-warnings"]
+
+[tasks.test]
+description = "Run the script runner checks"
+run = "bun test src/lib"
+
+[tasks.dev]
+description = "Run the playground (http://127.0.0.1:5184), which plays every example"
+run = "bun install && bunx vite --config playground/vite.config.ts"
+
+[tasks.film]
+description = "Film a scene as a contact sheet: mise run film -- <url> [--dark] [--width 390]"
+run = "bun scripts/film.ts"
+
+[tasks.verify]
+description = "check + test + filet, i.e. everything CI runs"
+depends = ["check", "test"]
+run = "filet check ."

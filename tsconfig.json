@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "strict": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "types": ["bun"],
+    "baseUrl": ".",
+    "paths": {
+      "@facile/mise-en-scene": ["./src/lib/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.svelte", "examples/**/*.svelte", "examples/**/*.ts", "playground/src/**/*.ts", "playground/src/**/*.svelte"]
+}

@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      - name: Type-check the kit, examples and playground
+        run: bunx svelte-check --tsconfig ./tsconfig.json --fail-on-warnings
+
+      - name: Unit tests
+        run: bun test src/lib
+
+      - name: Build the playground
+        run: bunx vite build --config playground/vite.config.ts
