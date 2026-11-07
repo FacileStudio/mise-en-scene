@@ -9,7 +9,7 @@ A scene is a small Svelte component: a `Stage` at a fixed design size, the produ
 The package is consumed from source, like muse:
 
 ```bash
-bun add "github:FacileStudio/mise-en-scene#v0.1.0"
+bun add "github:FacileStudio/mise-en-scene#v0.1.1"
 ```
 
 Install the agent skill for Claude Code and Codex:
