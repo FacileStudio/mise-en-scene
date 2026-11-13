@@ -6,8 +6,8 @@ description = "Type-check the kit, the examples and the playground (svelte-check
 run = ["bun install", "bunx svelte-check --tsconfig ./tsconfig.json --fail-on-warnings"]
 
 [tasks.test]
-description = "Run the script runner checks"
-run = "bun test src/lib"
+description = "Run the unit checks, then render every example on the server"
+run = ["bun test src/lib", "bun scripts/ssr.ts"]
 
 [tasks.dev]
 description = "Run the playground (http://127.0.0.1:5184), which plays every example"

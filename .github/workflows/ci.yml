@@ -24,5 +24,8 @@ jobs:
       - name: Unit tests
         run: bun test src/lib
 
+      - name: Server render
+        run: bun scripts/ssr.ts
+
       - name: Build the playground
         run: bunx vite build --config playground/vite.config.ts
