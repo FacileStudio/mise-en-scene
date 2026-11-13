@@ -40,6 +40,7 @@
 	import { untrack } from 'svelte';
 	import { createAct } from './act.js';
 	import { director, inView } from './director.js';
+	import { layout, reserve } from './layout.js';
 
 	let {
 		width,
@@ -57,9 +58,11 @@
 	let hostWidth = $state(0);
 	let stage = $state<HTMLElement>();
 
-	const isCompact = $derived(!!compact && hostWidth > 0 && hostWidth < compact.below);
-	const design = $derived(isCompact && compact ? compact : { width, height });
-	const scale = $derived(hostWidth ? Math.min(1, hostWidth / design.width) : 1);
+	const shot = $derived(layout(hostWidth, { width, height }, compact));
+	const isCompact = $derived(shot.compact);
+	const design = $derived(shot.design);
+	const scale = $derived(shot.scale);
+	const room = $derived(reserve({ width, height }, compact));
 
 	function play(node: HTMLElement) {
 		const run = script;
@@ -92,40 +95,43 @@
 The shot. Lays the scene out at its design size, scales it down to the host, swaps to the compact
 design on narrow hosts, loops the script only while on screen with the tab in front, and shows the
 poster frame under reduced motion. Everything inside is decorative: hidden from assistive tech and
-inert. The host reserves its height from the design's aspect ratio, so server-rendered pages do not
-jump or overflow before the stage measures its width.
+inert. The host reserves its height in CSS from its own width, picking the compact or wide design the
+way the script does, so a server-rendered page neither jumps nor overflows before the stage measures.
 -->
 
 <div
 	class="mes-host {className}"
-	style:aspect-ratio="{design.width} / {design.height}"
-	style:max-height="{design.height}px"
 	bind:clientWidth={hostWidth}
 	role={label ? 'img' : undefined}
 	aria-label={label}
 	{@attach play}
 >
-	<div
-		bind:this={stage}
-		class="mes-stage"
-		data-layout={isCompact ? 'compact' : 'wide'}
-		style:width="{design.width}px"
-		style:height="{design.height}px"
-		style:transform="translateX(-50%) scale({scale})"
-		style:visibility={hostWidth ? undefined : 'hidden'}
-		aria-hidden="true"
-		inert
-	>
-		{@render children({ compact: isCompact, scale })}
+	<div class="mes-room" style:height={room}>
+		<div
+			bind:this={stage}
+			class="mes-stage"
+			data-layout={isCompact ? 'compact' : 'wide'}
+			style:width="{design.width}px"
+			style:height="{design.height}px"
+			style:transform="translateX(-50%) scale({scale})"
+			style:visibility={hostWidth ? undefined : 'hidden'}
+			aria-hidden="true"
+			inert
+		>
+			{@render children({ compact: isCompact, scale })}
+		</div>
 	</div>
 </div>
 
 <style>
 	.mes-host {
-		position: relative;
 		width: 100%;
+		container-type: inline-size;
+		font-family: var(--font-fc-body);
+	}
+	.mes-room {
+		position: relative;
 		overflow: hidden;
-		font-family: var(--font-sans);
 	}
 	.mes-stage {
 		position: absolute;

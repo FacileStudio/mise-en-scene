@@ -19,7 +19,7 @@ async function main(): Promise<void> {
 		for (const path of SCENES) {
 			const { default: Scene } = (await vite.ssrLoadModule(path)) as { default: Component };
 			const { body } = render(Scene);
-			for (const needle of ['aria-hidden="true"', 'inert', 'aspect-ratio:']) {
+			for (const needle of ['aria-hidden="true"', 'inert', 'cqw']) {
 				if (!body.includes(needle)) throw new Error(`${path}: server render has no ${needle}`);
 			}
 			console.log(`ok ${path} renders on the server`);

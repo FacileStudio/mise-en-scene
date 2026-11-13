@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 import { director, inView } from './director';
+import { layout, reserve } from './layout';
 import { grow } from './transitions';
 
 function cast() {
@@ -69,5 +70,24 @@ describe('grow', () => {
 	it('grows to the layout height, not the scaled on-screen height', () => {
 		const node = { offsetHeight: 40, getBoundingClientRect: () => ({ height: 20 }) } as unknown as Element;
 		expect(grow(node).css?.(1, 0)).toContain('height: 40px');
+	});
+});
+
+function cssHeight(expression: string, width: number): number {
+	const js = expression.replaceAll('100cqw', `(${width})`).replaceAll('px', '').replaceAll('min(', 'Math.min(').replaceAll('max(', 'Math.max(');
+	return Function(`return ${js}`)() as number;
+}
+
+describe('reserve', () => {
+	const wide = { width: 960, height: 580 };
+	const compact = { below: 640, width: 358, height: 560 };
+
+	it('reserves the height the stage lays out at, compact or wide, before any script runs', () => {
+		for (const design of [undefined, compact]) {
+			for (const width of [280, 320, 358, 390, 500, 639, 640, 641, 800, 960, 1400]) {
+				const shot = layout(width, wide, design);
+				expect(cssHeight(reserve(wide, design), width)).toBeCloseTo(shot.design.height * shot.scale, 3);
+			}
+		}
 	});
 });
