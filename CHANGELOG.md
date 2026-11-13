@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.2.1 (2026-11-13)
+
+### Fixed
+
+- `Stage` reserves its height in CSS from its container width (`100cqw`), choosing the compact or wide design the same way the script does. Phones no longer see a one-time height jump on stages with a `compact` design, and the server render already has the right height.
+- `Cursor` draws its arrow in `fc-fg` with an `fc-page` edge instead of fixed white and black, so it inverts with the theme.
+- Scene text uses `--font-fc-body`, `Window` and `Tile` titles use `--font-fc-title`, and `Terminal` uses `--font-fc-mono`.
+- `install.sh` has seven functions instead of fourteen, which clears the filet warning. Its output and installed files are unchanged.
+
+### Changed
+
+- `Terminal` uses muse's inverse tokens (`fc-inverse`, `fc-on-inverse`). Consumers need `@facile/muse` v0.22.0 or later.
+- `@facile/muse` v0.22.0 is a devDependency. `rules.test.ts` fails when the kit reads a token that muse does not define, and the cursor's color exemption is gone.
+
 ## v0.2.0 (2026-11-13)
 
 ### Breaking

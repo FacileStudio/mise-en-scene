@@ -9,7 +9,7 @@ A scene is a small Svelte component: a `Stage` at a fixed design size, the produ
 The package is consumed from source, like muse:
 
 ```bash
-bun add "github:FacileStudio/mise-en-scene#v0.2.0"
+bun add "github:FacileStudio/mise-en-scene#v0.2.1"
 ```
 
 ```ts
