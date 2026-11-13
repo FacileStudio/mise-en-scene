@@ -16,23 +16,27 @@ FILES="SKILL.md references/craft.md references/framing.md references/motion.md r
 
 # --- output -----------------------------------------------------------------
 
-setup_colors() {
-  if [ -t 1 ] && [ -z "${NO_COLOR:-}" ] && [ "${TERM:-dumb}" != "dumb" ]; then
-    C_INFO=$'\033[36m' C_OK=$'\033[32m' C_WARN=$'\033[33m' C_ERR=$'\033[31m'
-    C_DIM=$'\033[2m' C_OFF=$'\033[0m'
-  else
-    C_INFO="" C_OK="" C_WARN="" C_ERR="" C_DIM="" C_OFF=""
-  fi
+say() {
+  local kind="$1"
+  shift
+  case "$kind" in
+    info) printf '%s▸%s %s\n' "$C_INFO" "$C_OFF" "$*" ;;
+    ok)   printf '%s✓%s %s\n' "$C_OK" "$C_OFF" "$*" ;;
+    warn) printf '%s!%s %s\n' "$C_WARN" "$C_OFF" "$*" >&2 ;;
+    hint) printf '  %s%s%s\n' "$C_DIM" "$*" "$C_OFF" ;;
+    die)  printf '%s✗%s %s\n' "$C_ERR" "$C_OFF" "$*" >&2; exit 1 ;;
+  esac
 }
 
-info() { printf '%s▸%s %s\n' "$C_INFO" "$C_OFF" "$*"; }
-ok()   { printf '%s✓%s %s\n' "$C_OK" "$C_OFF" "$*"; }
-warn() { printf '%s!%s %s\n' "$C_WARN" "$C_OFF" "$*" >&2; }
-hint() { printf '  %s%s%s\n' "$C_DIM" "$*" "$C_OFF"; }
-die()  { printf '%s✗%s %s\n' "$C_ERR" "$C_OFF" "$*" >&2; exit 1; }
+# --- steps ------------------------------------------------------------------
 
-usage() {
-  cat <<USAGE
+parse_args() {
+  LOCAL=0
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -l|--local) LOCAL=1; shift ;;
+      -h|--help)
+        cat <<USAGE
 Install the $NAME AI agent skill.
 
 Usage:
@@ -45,17 +49,9 @@ Options:
 Environment:
   NO_COLOR          Disable colored output
 USAGE
-}
-
-# --- steps ------------------------------------------------------------------
-
-parse_args() {
-  LOCAL=0
-  while [ $# -gt 0 ]; do
-    case "$1" in
-      -l|--local) LOCAL=1; shift ;;
-      -h|--help) usage; exit 0 ;;
-      *) die "unknown option: $1 — run install.sh --help" ;;
+        exit 0
+        ;;
+      *) say die "unknown option: $1 — run install.sh --help" ;;
     esac
   done
 }
@@ -67,19 +63,19 @@ fetch_skill() {
   if [ "$LOCAL" -eq 1 ]; then
     local here
     here="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
-    [ -f "$here/skill/SKILL.md" ] || die "--local needs a $NAME checkout — $here has no skill/SKILL.md"
-    info "Installing from $here"
+    [ -f "$here/skill/SKILL.md" ] || say die "--local needs a $NAME checkout — $here has no skill/SKILL.md"
+    say info "Installing from $here"
     cp -R "$here/skill/." "$WORK/"
     return
   fi
 
-  command -v curl >/dev/null 2>&1 || die "curl not found — install curl first"
-  info "Fetching skill"
+  command -v curl >/dev/null 2>&1 || say die "curl not found — install curl first"
+  say info "Fetching skill"
   local file
   for file in $FILES; do
     curl -fsSL -o "$WORK/$file" "https://raw.githubusercontent.com/$REPO/$BRANCH/skill/$file" ||
-      die "cannot download $file from $REPO"
-    [ -s "$WORK/$file" ] || die "the downloaded $file is empty"
+      say die "cannot download $file from $REPO"
+    [ -s "$WORK/$file" ] || say die "the downloaded $file is empty"
   done
 }
 
@@ -95,9 +91,9 @@ report_drift() {
   local had want
   had="$(wc -l <"$installed" | tr -d ' ')"
   want="$(wc -l <"$incoming" | tr -d ' ')"
-  warn "replacing a modified skill at $installed ($had lines → $want)"
+  say warn "replacing a modified skill at $installed ($had lines → $want)"
   [ "$had" -lt "$want" ] &&
-    hint "the installed copy was shorter than the published one — local edits are being discarded"
+    say hint "the installed copy was shorter than the published one — local edits are being discarded"
   return 0
 }
 
@@ -108,7 +104,7 @@ register_skill() {
     mkdir -p "$HOME/.claude/skills/$SKILL"
     report_drift "$HOME/.claude/skills/$SKILL/SKILL.md" "$WORK/SKILL.md"
     cp -R "$WORK/." "$HOME/.claude/skills/$SKILL/"
-    ok "Claude Code skill installed"
+    say ok "Claude Code skill installed"
     INSTALLED=1
   fi
 
@@ -116,7 +112,7 @@ register_skill() {
     mkdir -p "$HOME/.codex/$SKILL"
     cp -R "$WORK/references" "$HOME/.codex/$SKILL/"
     inject_block "$HOME/.codex/AGENTS.md" "$WORK/SKILL.md"
-    ok "Codex skill installed"
+    say ok "Codex skill installed"
     INSTALLED=1
   fi
 }
@@ -141,26 +137,27 @@ inject_block() {
   mv "$tmp" "$file"
 }
 
-report() {
-  if [ "$INSTALLED" -eq 0 ]; then
-    warn "no supported AI tool found on your PATH (claude, codex)"
-    hint "install one, then run this script again"
-    exit 1
-  fi
-  info "Update anytime by running this script again"
-}
-
 # --- main -------------------------------------------------------------------
 
+# Colours are set before args: parse_args can die, and `say die` dereferences $C_ERR
+# under `set -u`.
 main() {
-  # Colours before args: parse_args can die(), and die() dereferences $C_ERR
-  # under `set -u`.
-  setup_colors
+  if [ -t 1 ] && [ -z "${NO_COLOR:-}" ] && [ "${TERM:-dumb}" != "dumb" ]; then
+    C_INFO=$'\033[36m' C_OK=$'\033[32m' C_WARN=$'\033[33m' C_ERR=$'\033[31m'
+    C_DIM=$'\033[2m' C_OFF=$'\033[0m'
+  else
+    C_INFO="" C_OK="" C_WARN="" C_ERR="" C_DIM="" C_OFF=""
+  fi
   parse_args "$@"
-  info "Installing $NAME"
+  say info "Installing $NAME"
   fetch_skill
   register_skill
-  report
+  if [ "$INSTALLED" -eq 0 ]; then
+    say warn "no supported AI tool found on your PATH (claude, codex)"
+    say hint "install one, then run this script again"
+    exit 1
+  fi
+  say info "Update anytime by running this script again"
 }
 
 main "$@"
