@@ -2,15 +2,27 @@
 
 Faux product UI for Svelte 5: a kit to build landing-page demos that look like the real app, and an agent skill that teaches how to stage them. It is a Svelte port of [Stageshow](https://benji.org/stageshow) by Benji Taylor, with the Facile suite's rules on top.
 
-A scene is a small Svelte component: a `Stage` at a fixed design size, the product's screen inside it, and an async script that moves it through three to five beats. The stage scales to its host and plays only while on screen. It shows a poster frame to visitors who prefer reduced motion.
+A scene is a small Svelte component: a `Stage` at a fixed design size, the product's screen inside it, and an async script that moves it through three to five beats. The stage scales to its host and plays only while it is on screen and the tab is in front. It shows a poster frame to visitors who prefer reduced motion, and switches live when that setting changes. The scene is `aria-hidden` and `inert`, so it never takes focus.
 
 ## Install
 
 The package is consumed from source, like muse:
 
 ```bash
-bun add "github:FacileStudio/mise-en-scene#v0.1.1"
+bun add "github:FacileStudio/mise-en-scene#v0.2.0"
 ```
+
+```ts
+import { Stage, Window, Tile, Cursor, type Act } from '@facile/mise-en-scene';
+```
+
+The kit reads the consumer's muse theme and ships no colors or fonts of its own. Load `@facile/muse/styles` once in the root layout. It uses these tokens:
+
+- Colors: `--color-fc-page`, `--color-fc-component`, `--color-fc-surface`, `--color-fc-field`, `--color-fc-fg`, `--color-fc-fg-muted`.
+- Fonts: `--font-sans` for the scene, `--font-fc-title` for tile titles, `--font-fc-mono` for terminals.
+- Tiles: `--radius-fc-lg`, `--text-fc-lg`, `--text-fc-sm` and their line heights.
+
+Dark mode follows muse: the OS setting, overridden by a `.dark` or `.light` class on `<html>`.
 
 Install the agent skill for Claude Code and Codex:
 
@@ -41,7 +53,7 @@ curl -fsSL https://raw.githubusercontent.com/FacileStudio/mise-en-scene/main/ins
 </Stage>
 ```
 
-`examples/AgentChat.svelte` is a full hero: a prompt typed and sent, tool calls, an approval clicked by the cursor and a streamed answer. `examples/TerminalTile.svelte` is a bento tile.
+`examples/AgentChat.svelte` is a full hero: a prompt typed and sent, tool calls, an approval clicked by the cursor and a streamed answer. `examples/TerminalTile.svelte` is a bento tile built on `Tile`.
 
 ## Parts
 
@@ -50,6 +62,7 @@ curl -fsSL https://raw.githubusercontent.com/FacileStudio/mise-en-scene/main/ins
 | `Stage` | Design size, scale-to-fit, `compact` design, loop while on screen, `reset`, `poster` |
 | `Act` | `wait`, `type`, `count`, `point`, `move`, `click`; aborts when the stage leaves the screen |
 | `Window` | Desktop app frame with title bar, optional sidebar and trailing slot, dark-mode surfaces |
+| `Tile` | Bento tile: the demo on top, a title, one line of copy and an optional badge |
 | `Cursor` | The arrow, travelling on the travel curve |
 | `Bar` | Placeholder text that reads on any surface |
 | `Stream` | An answer streaming word by word without reflow |
@@ -57,14 +70,14 @@ curl -fsSL https://raw.githubusercontent.com/FacileStudio/mise-en-scene/main/ins
 | `Terminal`, `Caret` | A dark terminal panel and its block cursor |
 | `grow` | Height and opacity together, for anything that joins a list |
 
-Colors read muse tokens (`--color-fc-*`) with neutral fallbacks, so the kit works with or without muse.
+No part draws a border or names a font family. `src/lib/rules.test.ts` fails the build if one does.
 
 ## Develop
 
 ```bash
 mise run dev       # playground on http://127.0.0.1:5184, ?scene=agent-chat to play one
 mise run check     # svelte-check over the kit, examples and playground
-mise run test      # the script runner checks
+mise run test      # unit checks, then a server render of every example
 mise run verify    # check + test + filet
 bun scripts/film.ts "http://127.0.0.1:5184/?scene=agent-chat" --width 390 --dark
 ```

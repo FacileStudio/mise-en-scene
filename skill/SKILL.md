@@ -32,6 +32,7 @@ These come from the suite owner and override the references where they differ.
 - **Every visible string is translated.** Demo copy goes into the app's i18n catalogs in all four locales (en, fr, es, de). Identifiers, commands, file paths and branch names stay as they are.
 - **A demo gets a section title** when a section follows it; tiles carry their own title and one line of copy.
 - **Svelte 5 runes only**, muse tokens (`--color-fc-*`) for color, the app's own `Icon` set.
+- **Fonts come from the theme.** Write `font-family: var(--font-sans)`, `var(--font-fc-title)` or `var(--font-fc-mono)`, never a family name, and set the mono token on any `<code>`. The kit reads the same tokens, so a font change in muse reaches every demo.
 
 ## Workflow
 
@@ -40,7 +41,7 @@ Write the plan first: where it sits, the focal object, the action, the payoff, w
 1. **Medium and place.** Still or loop. The page, its width. Design at the size it is seen: about 960 × 580 for a full-width hero under copy, 720 × 480 beside copy, 320 × 240 for a bento tile. Every scene that can sit in a phone column gets a `compact` design at 358 wide: a redesign (drop the sidebar, move the status into the title bar), not a squeeze.
 2. **Look.** The product's tokens and components (Facile rules above). Light first, then check dark.
 3. **The story.** Three to five beats and a payoff, 10 to 16 seconds. No cursor move you cannot explain. The payoff holds about 2 seconds, then everything the story added leaves as one motion and the loop restarts within a second.
-4. **Start from an example.** Copy the closest scene from `examples/` (`AgentChat` for a hero with a cursor and an approval, `TerminalTile` for a tile) and replace its content with the product's. Read `references/craft.md` and `references/framing.md` before changing the frame.
+4. **Start from an example.** Copy the closest scene from `examples/` (`AgentChat` for a hero with a cursor and an approval, `TerminalTile` for a tile built on `Tile`) and replace its content with the product's. Read `references/craft.md` and `references/framing.md` before changing the frame.
 5. **The screen.** Count the real strings: usually 3 to 7. Everything else is `Bar`. Mark what the cursor touches with `bind:this` and measure it with `act.point`; never hard-code coordinates.
 6. **Choreograph.** Keep things mounted and toggle them so exits animate. Use `grow` for anything that joins a list, so it carries the rows below it. Put spacing inside the growing element (padding), not in the parent's `gap`. Text that changes rolls (`Roll`); an answer streams (`Stream`).
 7. **Rehearse.** Write `poster` first: the frame a reduced-motion visitor sees. Then film the loop (below) at the shown width and at 390, in light and dark, and read every frame. Fix framing first, then hierarchy, then motion, then polish. Faults that come back every time: a void where the eye lands, words under an overlapping panel, a label that wraps at compact width, a surface that vanishes in dark mode, a cursor covering the label it clicks.
@@ -48,7 +49,7 @@ Write the plan first: where it sits, the focal object, the action, the payoff, w
 ## The kit
 
 ```bash
-bun add "github:FacileStudio/mise-en-scene#v0.1.1"
+bun add "github:FacileStudio/mise-en-scene#v0.2.0"
 ```
 
 ```svelte
@@ -85,9 +86,10 @@ bun add "github:FacileStudio/mise-en-scene#v0.1.1"
 </Stage>
 ```
 
-- **`Stage`**: the shot. Lays the scene out at its design size and scales it to the host. Swaps to `compact` below a host width. Loops `script` only while on screen, calls `reset` when it leaves and shows `poster` under reduced motion. Its content is `aria-hidden` and `inert`; pass `label` for a description.
+- **`Stage`**: the shot. Lays the scene out at its design size and scales it to the host. Swaps to `compact` below a host width. Loops `script` only while on screen with the tab in front, calls `reset` before each run and when playback stops, and shows `poster` under reduced motion and for a still. Its content is `aria-hidden` and `inert`; pass `label` for a description.
 - **`Act`**: what a script gets. `wait(ms)`, `type(text, set, interval)`, `count(total, set, interval)`, `point(el, fx, fy)` (design pixels), `move(cursor, point, settle)`, `click(cursor, onPress)`. Every wait aborts when the stage leaves the screen.
 - **`Window`**: desktop app frame, 38px title bar, optional full-height `sidebar` and `trailing` snippets. Position it with `style`.
+- **`Tile`**: a bento tile. The `Stage` goes in as children; `title`, `body`, an optional `badge` snippet and `level` (heading 2 to 4) make the copy below it.
 - **`Cursor`**: the arrow. Set `x` and `y` through `act.move`; it travels on the travel curve.
 - **`Bar`**: placeholder text, a tint of the foreground so it reads on every surface.
 - **`Stream`**: an answer streaming word by word without reflow.
