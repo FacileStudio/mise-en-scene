@@ -19,7 +19,7 @@ import { Stage, Window, Tile, Cursor, type Act } from '@facile/mise-en-scene';
 The kit reads the consumer's muse theme and ships no colors or fonts of its own. Load `@facile/muse/styles` once in the root layout. It uses these tokens:
 
 - Colors: `--color-fc-page`, `--color-fc-component`, `--color-fc-surface`, `--color-fc-field`, `--color-fc-fg`, `--color-fc-fg-muted`.
-- Fonts: `--font-sans` for the scene, `--font-fc-title` for tile titles, `--font-fc-mono` for terminals.
+- Fonts: `--font-fc-body` for the scene, `--font-fc-title` for window and tile titles, `--font-fc-mono` for terminals.
 - Tiles: `--radius-fc-lg`, `--text-fc-lg`, `--text-fc-sm` and their line heights.
 
 Dark mode follows muse: the OS setting, overridden by a `.dark` or `.light` class on `<html>`.

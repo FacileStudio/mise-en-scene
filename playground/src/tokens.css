@@ -14,7 +14,7 @@
 	--text-fc-sm--line-height: 1.25rem;
 	--text-fc-lg: 1.125rem;
 	--text-fc-lg--line-height: 1.75rem;
-	--font-sans: ui-sans-serif, system-ui, sans-serif;
+	--font-fc-body: ui-sans-serif, system-ui, sans-serif;
 	--font-fc-title: ui-sans-serif, system-ui, sans-serif;
 	--font-fc-mono: ui-monospace, monospace;
 }
@@ -53,5 +53,5 @@ body {
 	margin: 0;
 	background: var(--color-fc-page);
 	color: var(--color-fc-fg);
-	font-family: var(--font-sans);
+	font-family: var(--font-fc-body);
 }

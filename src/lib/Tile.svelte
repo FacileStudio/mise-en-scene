@@ -46,7 +46,7 @@ tech reads.
 		overflow: hidden;
 		border-radius: var(--radius-fc-lg);
 		background: var(--color-fc-component);
-		font-family: var(--font-sans);
+		font-family: var(--font-fc-body);
 	}
 	.mes-tile-copy {
 		display: flex;

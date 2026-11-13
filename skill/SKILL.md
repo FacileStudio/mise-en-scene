@@ -32,7 +32,7 @@ These come from the suite owner and override the references where they differ.
 - **Every visible string is translated.** Demo copy goes into the app's i18n catalogs in all four locales (en, fr, es, de). Identifiers, commands, file paths and branch names stay as they are.
 - **A demo gets a section title** when a section follows it; tiles carry their own title and one line of copy.
 - **Svelte 5 runes only**, muse tokens (`--color-fc-*`) for color, the app's own `Icon` set.
-- **Fonts come from the theme.** Write `font-family: var(--font-sans)`, `var(--font-fc-title)` or `var(--font-fc-mono)`, never a family name, and set the mono token on any `<code>`. The kit reads the same tokens, so a font change in muse reaches every demo.
+- **Fonts come from the theme.** Write `font-family: var(--font-fc-body)`, `var(--font-fc-title)` or `var(--font-fc-mono)`, never a family name, and set the mono token on any `<code>`. The kit reads the same tokens, so a font change in muse reaches every demo.
 
 ## Workflow
 

@@ -85,6 +85,7 @@ chrome to `fc-surface`, so the window stands off a dark page. Position and size 
 		position: absolute;
 		left: 50%;
 		translate: -50% 0;
+		font-family: var(--font-fc-title);
 		font-size: 12px;
 		color: var(--color-fc-fg-muted);
 	}
