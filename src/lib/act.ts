@@ -74,23 +74,27 @@ export function createAct(signal: AbortSignal, stage: () => Element | undefined,
 		wait,
 		async type(text, set, interval = 38) {
 			for (let i = 1; i <= text.length; i++) {
+				signal.throwIfAborted();
 				set(text.slice(0, i));
 				await wait(interval);
 			}
 		},
 		async count(total, set, interval = 45) {
 			for (let i = 1; i <= total; i++) {
+				signal.throwIfAborted();
 				set(i);
 				await wait(interval);
 			}
 		},
 		point: (target, fx = 0.5, fy = 0.5) => measure(stage(), target, scale(), fx, fy),
 		async move(cursor, to, settle = 950) {
+			signal.throwIfAborted();
 			cursor.x = to.x;
 			cursor.y = to.y;
 			await wait(settle);
 		},
 		async click(cursor, onPress) {
+			signal.throwIfAborted();
 			cursor.down = true;
 			onPress?.();
 			await wait(140);
@@ -101,7 +105,13 @@ export function createAct(signal: AbortSignal, stage: () => Element | undefined,
 }
 
 /** The point at fractions `fx`, `fy` of `target`, in the stage's unscaled design pixels. */
-export function measure(stage: Element | undefined, target: Element | undefined, scale: number, fx = 0.5, fy = 0.5) {
+export function measure(
+	stage: Element | undefined,
+	target: Element | undefined,
+	scale: number,
+	fx = 0.5,
+	fy = 0.5
+): Point {
 	if (!stage || !target) return { x: 0, y: 0 };
 	const s = stage.getBoundingClientRect();
 	const t = target.getBoundingClientRect();

@@ -49,3 +49,14 @@ describe('act', () => {
 		expect(cursor.down).toBe(false);
 	});
 });
+
+describe('act after abort', () => {
+	it('leaves the cursor where it was once the run is aborted', async () => {
+		const controller = new AbortController();
+		const act = createAct(controller.signal, () => undefined, () => 1);
+		const cursor = cursorAt(5, 5);
+		controller.abort();
+		await expect(act.move(cursor, { x: 100, y: 100 })).rejects.toBeDefined();
+		expect(cursor).toEqual(cursorAt(5, 5));
+	});
+});

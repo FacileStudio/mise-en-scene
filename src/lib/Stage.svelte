@@ -18,11 +18,14 @@
 		height: number;
 		/** A second design for narrow hosts, used below `below` pixels of host width. */
 		compact?: StageSize & { below: number };
-		/** The scene's script; it loops while the stage is on screen. Omit it for a still, which shows `poster`. */
+		/**
+		 * The scene's script. It loops while the stage is on screen and the tab is visible. Omit it for a
+		 * still, which shows `poster`.
+		 */
 		script?: Script;
-		/** Puts the scene back on its opening frame; called when the stage leaves the screen. */
+		/** Puts the scene back on its opening frame; called before each run and when playback stops. */
 		reset?: () => void;
-		/** Puts the scene on the frame that tells the story alone; shown under reduced motion. */
+		/** Puts the scene on the frame that tells the story alone; shown under reduced motion and for a still. */
 		poster?: () => void;
 		/** How much of the stage must be visible before the script starts. */
 		threshold?: number;
@@ -34,7 +37,9 @@
 </script>
 
 <script lang="ts">
-	import { createAct, loop, prefersReducedMotion } from './act.js';
+	import { untrack } from 'svelte';
+	import { createAct } from './act.js';
+	import { director, inView } from './director.js';
 
 	let {
 		width,
@@ -57,31 +62,27 @@
 	const scale = $derived(hostWidth ? Math.min(1, hostWidth / design.width) : 1);
 
 	function play(node: HTMLElement) {
-		if (!script || prefersReducedMotion()) {
-			poster?.();
+		const run = script;
+		if (!run) {
+			untrack(() => poster?.());
 			return;
 		}
-		const run = script;
-		let controller: AbortController | null = null;
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (entry.isIntersecting && !controller) {
-					const current = new AbortController();
-					controller = current;
-					const act = createAct(current.signal, () => stage, () => scale);
-					void loop(() => run(act), current.signal);
-				} else if (!entry.isIntersecting && controller) {
-					controller.abort();
-					controller = null;
-					reset?.();
-				}
-			},
-			{ threshold }
-		);
+		const cast = director({ run: (signal) => run(createAct(signal, () => stage, () => scale)), reset, poster });
+		const motion = matchMedia('(prefers-reduced-motion: reduce)');
+		const onMotion = () => cast.update({ reduced: motion.matches });
+		const onVisibility = () => cast.update({ hidden: document.hidden });
+		const observer = new IntersectionObserver(([entry]) => cast.update({ onScreen: inView(entry, threshold) }), {
+			threshold: [0, threshold]
+		});
+		untrack(() => cast.update({ reduced: motion.matches, hidden: document.hidden }));
 		observer.observe(node);
+		motion.addEventListener('change', onMotion);
+		document.addEventListener('visibilitychange', onVisibility);
 		return () => {
 			observer.disconnect();
-			controller?.abort();
+			motion.removeEventListener('change', onMotion);
+			document.removeEventListener('visibilitychange', onVisibility);
+			cast.halt();
 		};
 	}
 </script>
@@ -89,13 +90,16 @@
 <!--
 @component
 The shot. Lays the scene out at its design size, scales it down to the host, swaps to the compact
-design on narrow hosts, loops the script only while on screen and shows the poster frame under
-reduced motion. Everything inside is decorative: hidden from assistive tech and inert.
+design on narrow hosts, loops the script only while on screen with the tab in front, and shows the
+poster frame under reduced motion. Everything inside is decorative: hidden from assistive tech and
+inert. The host reserves its height from the design's aspect ratio, so server-rendered pages do not
+jump or overflow before the stage measures its width.
 -->
 
 <div
 	class="mes-host {className}"
-	style:height="{design.height * scale}px"
+	style:aspect-ratio="{design.width} / {design.height}"
+	style:max-height="{design.height}px"
 	bind:clientWidth={hostWidth}
 	role={label ? 'img' : undefined}
 	aria-label={label}
@@ -108,6 +112,7 @@ reduced motion. Everything inside is decorative: hidden from assistive tech and 
 		style:width="{design.width}px"
 		style:height="{design.height}px"
 		style:transform="translateX(-50%) scale({scale})"
+		style:visibility={hostWidth ? undefined : 'hidden'}
 		aria-hidden="true"
 		inert
 	>
@@ -119,6 +124,8 @@ reduced motion. Everything inside is decorative: hidden from assistive tech and 
 	.mes-host {
 		position: relative;
 		width: 100%;
+		overflow: hidden;
+		font-family: var(--font-sans);
 	}
 	.mes-stage {
 		position: absolute;
