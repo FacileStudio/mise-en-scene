@@ -28,6 +28,7 @@
     "svelte": "^5.29.0"
   },
   "devDependencies": {
+    "@facile/muse": "github:FacileStudio/muse#v0.22.0",
     "@sveltejs/vite-plugin-svelte": "^6.2.4",
     "@types/bun": "^1.3.14",
     "playwright-core": "~1.48.2",

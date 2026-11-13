@@ -16,9 +16,9 @@ bun add "github:FacileStudio/mise-en-scene#v0.2.0"
 import { Stage, Window, Tile, Cursor, type Act } from '@facile/mise-en-scene';
 ```
 
-The kit reads the consumer's muse theme and ships no colors or fonts of its own. Load `@facile/muse/styles` once in the root layout. It uses these tokens:
+The kit reads the consumer's muse theme and ships no colors or fonts of its own. Load `@facile/muse/styles` (v0.22.0 or later) once in the root layout. It uses these tokens:
 
-- Colors: `--color-fc-page`, `--color-fc-component`, `--color-fc-surface`, `--color-fc-field`, `--color-fc-fg`, `--color-fc-fg-muted`.
+- Colors: `--color-fc-page`, `--color-fc-component`, `--color-fc-surface`, `--color-fc-field`, `--color-fc-fg`, `--color-fc-fg-muted`, and `--color-fc-inverse` with `--color-fc-on-inverse` for `Terminal`.
 - Fonts: `--font-fc-body` for the scene, `--font-fc-title` for window and tile titles, `--font-fc-mono` for terminals.
 - Tiles: `--radius-fc-lg`, `--text-fc-lg`, `--text-fc-sm` and their line heights.
 
@@ -70,7 +70,7 @@ curl -fsSL https://raw.githubusercontent.com/FacileStudio/mise-en-scene/main/ins
 | `Terminal`, `Caret` | A dark terminal panel and its block cursor |
 | `grow` | Height and opacity together, for anything that joins a list |
 
-No part draws a border or names a font family. `src/lib/rules.test.ts` fails the build if one does.
+No part draws a border or names a font family, and every token it reads exists in muse. `src/lib/rules.test.ts` checks both against the muse version pinned in `devDependencies`.
 
 ## Develop
 

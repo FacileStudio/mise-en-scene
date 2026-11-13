@@ -87,9 +87,9 @@
 		white-space: nowrap;
 	}
 	.tt-dim {
-		color: rgb(255 255 255 / 0.5);
+		color: var(--color-fc-on-inverse-muted);
 	}
 	.tt-ok {
-		color: color-mix(in oklch, var(--color-fc-success), white 35%);
+		color: color-mix(in oklab, var(--color-fc-success), var(--color-fc-on-inverse) 35%);
 	}
 </style>

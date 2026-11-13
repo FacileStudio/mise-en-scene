@@ -12,6 +12,8 @@ const RULES: [string, RegExp][] = [
 	['a hex color', /#[0-9a-fA-F]{3,8}\b/]
 ];
 
+const MUSE = readFileSync(join(ROOT, 'node_modules/@facile/muse/src/lib/styles/tokens.css'), 'utf8');
+
 function sources(): string[] {
 	return DIRS.flatMap((dir) =>
 		readdirSync(join(ROOT, dir))
@@ -26,6 +28,16 @@ describe('owner UI rules', () => {
 			const text = readFileSync(join(ROOT, file), 'utf8');
 			const broken = RULES.filter(([, rule]) => rule.test(text));
 			expect(broken.map(([what]) => what)).toEqual([]);
+		});
+	}
+});
+
+describe('muse tokens', () => {
+	for (const file of sources()) {
+		it(`${file} reads only tokens that muse defines`, () => {
+			const used = [...readFileSync(join(ROOT, file), 'utf8').matchAll(/var\((--(?:color|font|radius|text)-[\w-]+)/g)];
+			const missing = used.map(([, name]) => name).filter((name) => !MUSE.includes(`${name}:`));
+			expect(missing).toEqual([]);
 		});
 	}
 });
