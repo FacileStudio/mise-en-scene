@@ -1,5 +1,4 @@
-<script lang="ts">
-</script>
+<script lang="ts"></script>
 
 <!--
 @component
@@ -18,6 +17,11 @@ A blinking block caret, one character cell wide, for terminals and typed fields.
 		background: currentColor;
 		opacity: 0.75;
 		animation: mes-blink 1.1s steps(1) infinite;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.mes-caret {
+			animation: none;
+		}
 	}
 	@keyframes mes-blink {
 		50% {

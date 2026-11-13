@@ -1,7 +1,15 @@
+<script module lang="ts">
+	export interface RollProps {
+		/** The current word; a change rolls the old one out and the new one in. */
+		value: string;
+		class?: string;
+	}
+</script>
+
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 
-	let { value, class: className = '' }: { value: string; class?: string } = $props();
+	let { value, class: className = '' }: RollProps = $props();
 </script>
 
 <!--

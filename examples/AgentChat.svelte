@@ -132,8 +132,8 @@
 		overflow: hidden;
 		padding: 0 20px 12px;
 		font-size: 14px;
-		color: var(--color-fc-fg, #111);
-		mask-image: linear-gradient(to bottom, transparent, #000 48px);
+		color: var(--color-fc-fg);
+		mask-image: linear-gradient(to bottom, transparent, black 48px);
 	}
 	.ac-past {
 		display: grid;
@@ -145,7 +145,7 @@
 		width: 40%;
 		height: 32px;
 		border-radius: 12px;
-		background: var(--color-fc-surface, oklch(0.95 0 0));
+		background: var(--color-fc-surface);
 	}
 	.ac-q {
 		display: flex;
@@ -157,14 +157,14 @@
 		margin: 0;
 		padding: 8px 14px;
 		border-radius: 12px;
-		background: var(--color-fc-surface, oklch(0.95 0 0));
+		background: var(--color-fc-surface);
 	}
 	.ac-steps {
 		margin: 16px 0 0;
 		padding: 4px 0;
 		list-style: none;
 		border-radius: 12px;
-		background: var(--color-fc-component, oklch(0.975 0 0));
+		background: var(--color-fc-surface);
 	}
 	.ac-steps li {
 		display: flex;
@@ -173,21 +173,22 @@
 		padding: 8px 12px;
 	}
 	.ac-steps code {
+		font-family: var(--font-fc-mono);
 		font-size: 12px;
-		color: var(--color-fc-fg-muted, #666);
+		color: var(--color-fc-fg-muted);
 	}
 	.ac-mark {
 		width: 8px;
 		height: 8px;
 		border-radius: 999px;
-		background: var(--color-fc-fg-muted, #999);
+		background: var(--color-fc-fg-muted);
 		transition: background 0.2s ease;
 	}
 	[data-state='ok'] .ac-mark {
-		background: var(--color-fc-success, #2a8f4f);
+		background: var(--color-fc-success);
 	}
 	[data-state='failed'] .ac-mark {
-		background: var(--color-fc-danger, #c33);
+		background: var(--color-fc-danger);
 	}
 	:global(.ac-answer) {
 		margin: 0;
@@ -201,7 +202,7 @@
 		margin: 0 20px 20px;
 		padding: 8px 8px 8px 20px;
 		border-radius: 31px;
-		background: var(--color-fc-field, oklch(0.93 0 0));
+		background: var(--color-fc-field);
 		font-size: 15px;
 	}
 	.ac-composer > span:first-child {
@@ -211,13 +212,13 @@
 		text-overflow: ellipsis;
 	}
 	.ac-placeholder {
-		color: var(--color-fc-fg-muted, #888);
+		color: var(--color-fc-fg-muted);
 	}
 	.ac-send {
 		width: 40px;
 		height: 40px;
 		border-radius: 999px;
-		background: var(--color-fc-accent, #111);
+		background: var(--color-fc-accent);
 		transition: opacity 0.15s ease;
 	}
 	.ac-idle {

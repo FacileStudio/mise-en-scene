@@ -1,5 +1,15 @@
+<script module lang="ts">
+	export interface StreamProps {
+		/** The full answer; words split on spaces. */
+		text: string;
+		/** How many words are visible. */
+		count: number;
+		class?: string;
+	}
+</script>
+
 <script lang="ts">
-	let { text, count, class: className = '' }: { text: string; count: number; class?: string } = $props();
+	let { text, count, class: className = '' }: StreamProps = $props();
 
 	const words = $derived(text.split(' '));
 </script>

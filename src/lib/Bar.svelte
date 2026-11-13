@@ -1,10 +1,17 @@
+<script module lang="ts">
+	export interface BarProps {
+		/** Width: a CSS length, or a number of design pixels. */
+		w?: string | number;
+		/** Height in design pixels. */
+		h?: number;
+		/** Corner radius in design pixels; half the height by default. */
+		r?: number;
+		class?: string;
+	}
+</script>
+
 <script lang="ts">
-	let {
-		w = '60%',
-		h = 8,
-		r,
-		class: className = ''
-	}: { w?: string | number; h?: number; r?: number; class?: string } = $props();
+	let { w = '60%', h = 8, r, class: className = '' }: BarProps = $props();
 </script>
 
 <!--
@@ -24,6 +31,6 @@ The tint is a share of the foreground, so it reads on any surface in light and d
 	.mes-bar {
 		display: block;
 		flex: none;
-		background: color-mix(in oklch, var(--color-fc-fg, #000) 9%, transparent);
+		background: color-mix(in oklch, var(--color-fc-fg) 9%, transparent);
 	}
 </style>

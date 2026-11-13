@@ -48,14 +48,14 @@ settled line swap with `grow`, so the thread keeps its height moving instead of 
 		transition: scale 0.1s ease;
 	}
 	.ap-approve {
-		background: var(--color-fc-accent, #111);
-		color: var(--color-fc-accent-fg, #fff);
+		background: var(--color-fc-accent);
+		color: var(--color-fc-accent-fg);
 	}
 	.ap-pressed {
 		scale: 0.95;
 	}
 	.ap-muted {
-		color: var(--color-fc-fg-muted, #666);
+		color: var(--color-fc-fg-muted);
 	}
 	.ap-settled {
 		margin: 0;
@@ -64,6 +64,6 @@ settled line swap with `grow`, so the thread keeps its height moving instead of 
 	}
 	.ap-settled em {
 		font-style: normal;
-		color: var(--color-fc-success, #2a8f4f);
+		color: var(--color-fc-success);
 	}
 </style>

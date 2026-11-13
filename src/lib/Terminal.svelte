@@ -1,11 +1,16 @@
-<script lang="ts">
+<script module lang="ts">
 	import type { Snippet } from 'svelte';
 
-	let {
-		class: className = '',
-		style,
-		children
-	}: { class?: string; style?: string; children: Snippet } = $props();
+	export interface TerminalProps {
+		class?: string;
+		/** Position and size inside the stage, in design pixels. */
+		style?: string;
+		children: Snippet;
+	}
+</script>
+
+<script lang="ts">
+	let { class: className = '', style, children }: TerminalProps = $props();
 </script>
 
 <!--
@@ -26,7 +31,7 @@ from shadow. Lines are monospace on a character grid; use `Caret` for the cursor
 		border-radius: 12px;
 		background: oklch(0.18 0 0);
 		color: rgb(255 255 255 / 0.9);
-		font-family: var(--font-fc-mono, ui-monospace, monospace);
+		font-family: var(--font-fc-mono);
 		font-size: 12px;
 		line-height: 20px;
 		box-shadow: 0 18px 40px -16px rgb(0 0 0 / 0.35);

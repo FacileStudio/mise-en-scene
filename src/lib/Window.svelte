@@ -21,7 +21,8 @@
 <!--
 @component
 A desktop app window: a 38px title bar, an optional full-height sidebar and the body. Its depth comes
-from shadow and surface steps, never a border. Position and size it from the scene with `class` or
+from shadow and surface steps, never a border: in dark mode the body steps up to `fc-component` and the
+chrome to `fc-surface`, so the window stands off a dark page. Position and size it from the scene with `class` or
 `style`; keep it whole inside the stage, four corners rounded and the shadow uncut, never squashed.
 -->
 
@@ -41,25 +42,26 @@ from shadow and surface steps, never a border. Position and size it from the sce
 
 <style>
 	.mes-window {
-		--mes-w-body: var(--color-fc-page, #fff);
-		--mes-w-side: var(--color-fc-component, oklch(0.975 0 0));
+		--mes-w-body: var(--color-fc-page);
+		--mes-w-side: var(--color-fc-component);
 		position: absolute;
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
 		border-radius: 12px;
 		background: var(--mes-w-body);
+		color: var(--color-fc-fg);
 		box-shadow: var(--mes-shadow-hero, 0 30px 70px -20px rgb(0 0 0 / 0.22), 0 8px 24px -8px rgb(0 0 0 / 0.1));
 	}
 	@media (prefers-color-scheme: dark) {
 		:global(:root:not(.light)) .mes-window {
-			--mes-w-body: oklch(0.13 0 0);
-			--mes-w-side: oklch(0.16 0 0);
+			--mes-w-body: var(--color-fc-component);
+			--mes-w-side: var(--color-fc-surface);
 		}
 	}
 	:global(:root.dark) .mes-window {
-		--mes-w-body: oklch(0.13 0 0);
-		--mes-w-side: oklch(0.16 0 0);
+		--mes-w-body: var(--color-fc-component);
+		--mes-w-side: var(--color-fc-surface);
 	}
 	.mes-side {
 		background: var(--mes-w-side);
@@ -77,14 +79,14 @@ from shadow and surface steps, never a border. Position and size it from the sce
 		width: 12px;
 		height: 12px;
 		border-radius: 999px;
-		background: var(--color-fc-surface, oklch(0.95 0 0));
+		background: var(--color-fc-field);
 	}
 	.mes-title {
 		position: absolute;
 		left: 50%;
 		translate: -50% 0;
 		font-size: 12px;
-		color: var(--color-fc-fg-muted, #666);
+		color: var(--color-fc-fg-muted);
 	}
 	.mes-trailing {
 		display: flex;

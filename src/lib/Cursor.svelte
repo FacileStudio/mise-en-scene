@@ -1,7 +1,14 @@
-<script lang="ts">
+<script module lang="ts">
 	import type { CursorState } from './act.js';
 
-	let { cursor }: { cursor: CursorState } = $props();
+	export interface CursorProps {
+		/** The cursor's position and state; keep it in `$state(cursorAt())` and move it with `act.move`. */
+		cursor: CursorState;
+	}
+</script>
+
+<script lang="ts">
+	let { cursor }: CursorProps = $props();
 </script>
 
 <!--
@@ -37,5 +44,10 @@ The macOS arrow, from Stageshow's kit glyph. Travel is CSS on the travel curve, 
 			translate 0.9s cubic-bezier(0.45, 0, 0.1, 1),
 			opacity 0.3s ease,
 			scale 0.12s ease;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.mes-cursor {
+			transition: none;
+		}
 	}
 </style>

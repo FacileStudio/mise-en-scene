@@ -20,18 +20,6 @@
 </main>
 
 <style>
-	:global(body) {
-		margin: 0;
-		background: #fff;
-		color: #111;
-		font-family: system-ui, sans-serif;
-	}
-	@media (prefers-color-scheme: dark) {
-		:global(body) {
-			background: oklch(0.09 0 0);
-			color: #eee;
-		}
-	}
 	main {
 		display: grid;
 		gap: 64px;

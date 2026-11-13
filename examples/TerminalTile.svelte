@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Caret, Stage, Terminal, type Act } from '../src/lib/index.js';
+	import { Caret, Stage, Terminal, Tile, type Act } from '../src/lib/index.js';
 
 	type Line = { kind: 'cmd' | 'ok' | 'out'; text: string };
 
@@ -44,7 +44,7 @@
 	}
 </script>
 
-<div class="tt">
+<Tile class="tt" title="Its own computer" body="A persistent VM per user, to run, edit and build safely.">
 	<Stage width={320} height={240} {script} {reset} {poster}>
 		{#snippet children()}
 			<Terminal style="top:24px;left:24px;right:-40px;bottom:-24px">
@@ -65,18 +65,11 @@
 			</Terminal>
 		{/snippet}
 	</Stage>
-	<div class="tt-copy">
-		<span class="tt-title">Its own computer</span>
-		<span class="tt-body">A persistent VM per user, to run, edit and build safely.</span>
-	</div>
-</div>
+</Tile>
 
 <style>
-	.tt {
-		overflow: hidden;
+	:global(.tt) {
 		max-width: 320px;
-		border-radius: 12px;
-		background: var(--color-fc-component, oklch(0.975 0 0));
 	}
 	.tt-head {
 		display: flex;
@@ -88,7 +81,7 @@
 		width: 8px;
 		height: 8px;
 		border-radius: 999px;
-		background: oklch(0.72 0.17 150);
+		background: var(--color-fc-success);
 	}
 	.tt-line {
 		white-space: nowrap;
@@ -97,20 +90,6 @@
 		color: rgb(255 255 255 / 0.5);
 	}
 	.tt-ok {
-		color: oklch(0.8 0.15 150);
-	}
-	.tt-copy {
-		display: grid;
-		gap: 6px;
-		padding: 8px 24px 24px;
-	}
-	.tt-title {
-		font-weight: 600;
-		font-size: 18px;
-		color: var(--color-fc-fg, #111);
-	}
-	.tt-body {
-		font-size: 14px;
-		color: var(--color-fc-fg-muted, #666);
+		color: color-mix(in oklch, var(--color-fc-success), white 35%);
 	}
 </style>

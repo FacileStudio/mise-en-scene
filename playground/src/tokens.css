@@ -1,0 +1,57 @@
+:root {
+	--color-fc-page: oklch(1 0 0);
+	--color-fc-surface: oklch(0.95 0 0);
+	--color-fc-component: oklch(0.975 0 0);
+	--color-fc-field: oklch(0.91 0 0);
+	--color-fc-fg: oklch(0.145 0 0);
+	--color-fc-fg-muted: oklch(0.5 0 0);
+	--color-fc-accent: oklch(0.145 0 0);
+	--color-fc-accent-fg: oklch(1 0 0);
+	--color-fc-danger: oklch(0.54 0.22 29);
+	--color-fc-success: oklch(0.5 0.12 150);
+	--radius-fc-lg: 12px;
+	--text-fc-sm: 0.875rem;
+	--text-fc-sm--line-height: 1.25rem;
+	--text-fc-lg: 1.125rem;
+	--text-fc-lg--line-height: 1.75rem;
+	--font-sans: ui-sans-serif, system-ui, sans-serif;
+	--font-fc-title: ui-sans-serif, system-ui, sans-serif;
+	--font-fc-mono: ui-monospace, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not(.light) {
+		color-scheme: dark;
+		--color-fc-page: oklch(0.09 0 0);
+		--color-fc-surface: oklch(0.21 0 0);
+		--color-fc-component: oklch(0.16 0 0);
+		--color-fc-field: oklch(0.26 0 0);
+		--color-fc-fg: oklch(0.985 0 0);
+		--color-fc-fg-muted: oklch(0.64 0 0);
+		--color-fc-accent: oklch(0.985 0 0);
+		--color-fc-accent-fg: oklch(0.09 0 0);
+		--color-fc-danger: oklch(0.65 0.22 29);
+		--color-fc-success: oklch(0.72 0.14 150);
+	}
+}
+
+:root.dark {
+	color-scheme: dark;
+	--color-fc-page: oklch(0.09 0 0);
+	--color-fc-surface: oklch(0.21 0 0);
+	--color-fc-component: oklch(0.16 0 0);
+	--color-fc-field: oklch(0.26 0 0);
+	--color-fc-fg: oklch(0.985 0 0);
+	--color-fc-fg-muted: oklch(0.64 0 0);
+	--color-fc-accent: oklch(0.985 0 0);
+	--color-fc-accent-fg: oklch(0.09 0 0);
+	--color-fc-danger: oklch(0.65 0.22 29);
+	--color-fc-success: oklch(0.72 0.14 150);
+}
+
+body {
+	margin: 0;
+	background: var(--color-fc-page);
+	color: var(--color-fc-fg);
+	font-family: var(--font-sans);
+}
