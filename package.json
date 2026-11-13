@@ -13,7 +13,8 @@
       "svelte": "./src/lib/index.ts",
       "types": "./src/lib/index.ts",
       "default": "./src/lib/index.ts"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "src/lib",
