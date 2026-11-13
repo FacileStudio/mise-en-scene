@@ -1,5 +1,38 @@
 # Changelog
 
+## v0.2.0 (2026-11-13)
+
+### Breaking
+
+- The kit reads muse tokens with no fallbacks. A page without `@facile/muse/styles` (or the same `--color-fc-*`, `--font-*` tokens) renders the scene unstyled.
+- `Stage` calls `reset` before every run, not only when the stage leaves the screen.
+- `Stage` sizes its host with `aspect-ratio` and `max-height` instead of an inline `height`. A consumer that overrode the host height in CSS must drop that override.
+
+### Added
+
+- `Tile`: a bento tile with the demo on top, then a title, one line of copy, an optional `badge` and a `level` for the heading. It comes from Bulle's landing `DemoTile`.
+- Typed props for every part: `TileProps`, `CursorProps`, `BarProps`, `StreamProps`, `RollProps`, `TerminalProps`.
+- `./package.json` in the exports map.
+
+### Fixed
+
+- `Stage` pauses when the tab is hidden and resumes from the opening frame when it comes back.
+- `Stage` stops when it scrolls below its `threshold`. It used to keep playing until the scene was fully off screen, because a partly visible entry still counts as intersecting.
+- `Stage` follows a reduced-motion change live: it stops and shows the poster, or resumes.
+- `Stage` no longer re-runs its playback when `poster` reads scene state.
+- `Stage` renders on the server at the right height and without a horizontal scroll on phones. The scene stays hidden until the stage has measured its width.
+- `grow` opens rows to their full height inside a scaled-down stage. It read the on-screen height, so on a phone a row grew to its scaled size and then jumped.
+- `act.type`, `act.count`, `act.move` and `act.click` do nothing once the run is aborted, so a script that resumes after a `tick` cannot move the cursor after `reset`.
+- `Caret` stops blinking and `Cursor` stops gliding under reduced motion.
+- Fonts come from `--font-sans`, `--font-fc-title` and `--font-fc-mono`. The kit names no font family.
+- `Window` in dark mode uses `fc-component` and `fc-surface` instead of its own fixed grays. Its title bar dots use `fc-field`, so they show on both surfaces.
+
+### Changed
+
+- `examples/TerminalTile` is built on `Tile`. The examples read tokens only and give `<code>` the mono token.
+- The playground loads a token stub that mirrors muse in light and dark.
+- `mise run test` and CI render every example on the server (`scripts/ssr.ts`). `src/lib/rules.test.ts` fails on a border, a hex color, a stock Tailwind palette color or a hardcoded font family.
+
 ## v0.1.1 (2026-11-07)
 
 ### Fixed
