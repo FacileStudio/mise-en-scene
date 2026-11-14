@@ -1,3 +1,5 @@
+<svelte:options css="injected" />
+
 <script module lang="ts">
 	export interface RollProps {
 		/** The current word; a change rolls the old one out and the new one in. */

@@ -24,6 +24,12 @@ The kit reads the consumer's muse theme and ships no colors or fonts of its own.
 
 Dark mode follows muse: the OS setting, overridden by a `.dark` or `.light` class on `<html>`.
 
+### Vite setup
+
+None. The kit needs no `optimizeDeps` entry, no CSS import and no plugin option, on Vite 7 and Vite 8, with SSR or as an SPA. Remove any `@facile/mise-en-scene` entry from `optimizeDeps.include` and `optimizeDeps.exclude`; either one still works, but neither is needed. Keep `@facile/muse` in `optimizeDeps.exclude` if the app already has it there, because that entry is for muse.
+
+Every component compiles with `<svelte:options css="injected" />`, so its styles travel inside its JavaScript and Svelte writes them into the page head, also in the server render. Before v0.2.2 the styles were separate virtual CSS modules (`Stage.svelte?svelte&type=style&lang.css`). With `@sveltejs/vite-plugin-svelte` 6 (Vite 7), an unbundled kit gets a `?v=` query on each component, the plugin then cannot find the compiled CSS ("failed to load virtual css module"), and Vite falls back to reading the `.svelte` file as CSS, which `@tailwindcss/vite` rejects ("Invalid declaration"). A CSP needs `style-src 'unsafe-inline'`, which the suite's default policy already sends.
+
 Install the agent skill for Claude Code and Codex:
 
 ```bash

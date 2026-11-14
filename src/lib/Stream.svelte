@@ -1,3 +1,5 @@
+<svelte:options css="injected" />
+
 <script module lang="ts">
 	export interface StreamProps {
 		/** The full answer; words split on spaces. */

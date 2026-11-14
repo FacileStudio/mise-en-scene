@@ -1,3 +1,5 @@
+<svelte:options css="injected" />
+
 <script module lang="ts">
 	export interface BarProps {
 		/** Width: a CSS length, or a number of design pixels. */

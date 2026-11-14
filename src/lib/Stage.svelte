@@ -1,3 +1,5 @@
+<svelte:options css="injected" />
+
 <script module lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { Script } from './act.js';

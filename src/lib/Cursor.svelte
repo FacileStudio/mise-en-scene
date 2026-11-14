@@ -1,3 +1,5 @@
+<svelte:options css="injected" />
+
 <script module lang="ts">
 	import type { CursorState } from './act.js';
 
