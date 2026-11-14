@@ -49,8 +49,10 @@ Write the plan first: where it sits, the focal object, the action, the payoff, w
 ## The kit
 
 ```bash
-bun add "github:FacileStudio/mise-en-scene#v0.2.1"
+bun add "github:FacileStudio/mise-en-scene#v0.2.2"
 ```
+
+The kit needs no Vite setup. Do not add it to `optimizeDeps.include` or `optimizeDeps.exclude`; remove an entry you find there.
 
 ```svelte
 <script lang="ts">

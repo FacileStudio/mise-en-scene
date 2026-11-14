@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.2 (2026-11-14)
+
+### Fixed
+
+- `vite dev` no longer fails with "failed to load virtual css module" or a Tailwind "Invalid declaration" overlay. Every component compiles with `<svelte:options css="injected" />`, so no virtual CSS module exists to miss. Consumers need no `optimizeDeps` entry for the kit, on Vite 7 or 8, with SSR or as an SPA.
+
 ## v0.2.1 (2026-11-13)
 
 ### Fixed

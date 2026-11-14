@@ -1,6 +1,6 @@
 {
   "name": "@facile/mise-en-scene",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Svelte 5 kit and agent skill for faux product UI demos: stages, windows, cursors and scripted scenes",
   "type": "module",
   "license": "MIT",
